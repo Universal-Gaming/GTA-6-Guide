@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://universal-gaming.github.io/GTA-6-Guide/sitemap.xml
