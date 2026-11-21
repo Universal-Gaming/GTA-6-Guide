@@ -1,36 +1,55 @@
 # UGN GTA VI Guide 🌴
 
-**Explore Leonida. Discover more.** An independent fan-made GTA VI companion website by Universal Gaming Network.
+**Explore Leonida. Track your discoveries.** An independent, fan-made Grand Theft Auto VI companion by Universal Gaming Network.
 
-**[🌐 Open the live website](https://universal-gaming.github.io/GTA-6-Guide/)** · [Universal Gaming Network](https://universalgaming.us/)
+**[Open the live website](https://universal-gaming.github.io/GTA-6-Guide/)** · [UGN](https://universalgaming.us/)
 
-## Current prototype
-- Neon-themed responsive homepage.
-- Interactive **schematic** map with drag-to-pan, zoom, fullscreen, region markers and search.
-- Saved locations persisted locally in the browser.
-- Sixteen planned guide categories.
+## Implemented features
 
-> **Accuracy notice:** The current map is illustrative and not geographically accurate. Region marker coordinates are placeholders, not verified in-game coordinates. Detailed missions, collectibles and GPS routing are not yet implemented.
+- Responsive UGN / Vice City themed homepage, character dossiers, region guides, research index and introduction.
+- Interactive **schematic** map: pan, zoom, fullscreen, search, six illustrative region markers and browser-saved favorites.
+- Personal map pins (up to 100), stored locally, clearly distinguished from verified game locations.
+- Official printable map link and 15-place grid-square reference finder.
+- 95-mission, five-chapter index with completion tracking and spoiler controls. Dynamic mission dossiers include sourced walkthrough steps for **nine** missions, plus two reference-only entries.
+- Previous/next mission navigation and per-mission private notes.
+- Collectible Field Journal: 13 source-backed leads (one VGC whale-statue lead plus 12 Push Square sculpture leads), custom entries, found status, filtering and JSON export/import.
+- Collectible directory on the map shares found status with the journal via localStorage.
+- Separate personal goal tracker with JSON backup, and optional WebGL 3D experience with fallback.
+- Sitemap, robots.txt and automated static link/sitemap and inline JavaScript syntax checks.
+
+## Accuracy and map limitations
+
+**This is not yet a complete game guide.** The map is illustrative, **not** an accurate in-game map or GPS system. Marker coordinates on it are not real game coordinates. Collectible entries provide published descriptive directions, **not** verified pin coordinates. Mission details are incomplete and some titles are spoilers. Personal pins and notes are user-authored, not independently verified.
+
+The official Leonida map can be accessed via [Rockstar's GTA VI media page](https://www.rockstargames.com/VI/media). We link to it rather than copying proprietary artwork. For corrections, link to primary or reputable published sources.
+
+## Development and checks
+
+The website is static HTML, CSS and JavaScript, deployed on GitHub Pages; no backend or build process is required. Python 3.12+ and Node.js 22+ are used for optional local checks:
+
+```sh
+python validate_site.py
+python validate_javascript.py
+```
+
+GitHub Actions runs both checks on pushes and pull requests. These checks verify static paths, sitemap and inline JavaScript **syntax**; they do not replace real browser, mobile, accessibility, or end-to-end testing.
+
+## Data and privacy
+
+Progress, custom discoveries, mission notes and map pins are stored in your browser's localStorage. No UGN account or server-side sync is provided. Clearing browser storage or using a different device can lose progress. Export backups from the collectible journal and progress tracker where available.
 
 ## Roadmap
-1. Replace illustrative geography with accurate, appropriately licensed cartography.
-2. Build structured, cited location and guide databases.
-3. Add verified collectibles and completion tracking.
-4. Implement GPS only when a validated road graph is available.
-5. Add optional 3D scenes with a performance-friendly 2D fallback.
-6. Expand original guides, accessibility, SEO and automated tests.
 
-## How to contribute
-Open an issue with a precise feature request, a documented correction, or a verifiable location. Please include sources and avoid posting unverified spoilers as facts. Do not upload copyrighted game maps, proprietary textures or assets without permission.
+1. Obtain permission or a suitable original/licensed base map and calibrate actual positions.
+2. Add more sourced walkthroughs, collectibles and in-game mechanics.
+3. Consolidate cross-page backup/restore and improve accessible keyboard/touch map controls.
+4. Add automated browser smoke tests and mobile performance benchmarks.
+5. Implement routing only after a validated navigable road graph is available.
 
-## Share the project
-- Demo the interactive map in a 15–30 second short video.
-- Share factual progress updates in relevant gaming communities where self-promotion is permitted.
-- Link useful individual guides when they are published, rather than posting generic advertisements.
-- Invite contributors to verify locations and report bugs.
+## Contributing
 
-## Technology
-The first version is plain HTML, CSS and JavaScript with no build dependencies, making it easy to host on GitHub Pages.
+Open an issue with precise reproduction steps, source-backed corrections, or new location research. Do not submit copyrighted map tiles, game textures or proprietary assets without permission. Avoid presenting guesses or unverified spoilers as fact.
 
 ## Disclaimer
-Independent fan project; not affiliated with Rockstar Games or Take-Two Interactive. Trademarks belong to their respective owners.
+
+Independent fan project. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive. Trademarks belong to their owners.
