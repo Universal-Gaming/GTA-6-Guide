@@ -18,6 +18,8 @@
 - **Progress Vault**: one-file export and validated restore for mission completion, notes, collectibles, personal map pins, saved places and tracker data. Local-only reset controls.
 - Sitemap, robots.txt and automated static link/sitemap and inline JavaScript syntax checks.
 
+- Research Desk documenting primary sources, verification policy and corrections workflow.
+
 ## Accuracy and map limitations
 
 **This is not yet a complete game guide.** The map is illustrative, **not** an accurate in-game map or GPS system. Marker coordinates on it are not real game coordinates. Collectible entries provide published descriptive directions, **not** verified pin coordinates. Mission details are incomplete and some titles are spoilers. Personal pins and notes are user-authored, not independently verified.
