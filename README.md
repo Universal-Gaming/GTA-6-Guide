@@ -15,6 +15,7 @@
 - Collectible Field Journal: 13 source-backed leads (one VGC whale-statue lead plus 12 Push Square sculpture leads), custom entries, found status, filtering and JSON export/import.
 - Collectible directory on the map shares found status with the journal via localStorage.
 - Separate personal goal tracker with JSON backup, and optional WebGL 3D experience with fallback.
+- **Progress Vault**: one-file export and validated restore for mission completion, notes, collectibles, personal map pins, saved places and tracker data. Local-only reset controls.
 - Sitemap, robots.txt and automated static link/sitemap and inline JavaScript syntax checks.
 
 ## Accuracy and map limitations
@@ -42,7 +43,7 @@ Progress, custom discoveries, mission notes and map pins are stored in your brow
 
 1. Obtain permission or a suitable original/licensed base map and calibrate actual positions.
 2. Add more sourced walkthroughs, collectibles and in-game mechanics.
-3. Consolidate cross-page backup/restore and improve accessible keyboard/touch map controls.
+3. Improve accessible keyboard/touch map controls and add end-to-end tests for Progress Vault export/restore.
 4. Add automated browser smoke tests and mobile performance benchmarks.
 5. Implement routing only after a validated navigable road graph is available.
 
