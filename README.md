@@ -19,6 +19,7 @@
 - Sitemap, robots.txt and automated static link/sitemap and inline JavaScript syntax checks.
 
 - Research Desk documenting primary sources, verification policy and corrections workflow.
+- Searchable Gameplay Encyclopedia with 23 Rockstar-source-linked entries for vehicles, weapons, businesses, customization, places, protagonists and edition distinctions.
 
 ## Accuracy and map limitations
 
