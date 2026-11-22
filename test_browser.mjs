@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('69 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('72 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==69)throw Error('Sourced walkthrough filter should show sixty-nine missions');
+ if(await page.locator('#chapters .mission').count()!==72)throw Error('Sourced walkthrough filter should show seventy-two missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==0)throw Error('Reference-only filter should show zero missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==26)throw Error('Index-only filter should show 26 missions');
+ if(await page.locator('#chapters .mission').count()!==23)throw Error('Index-only filter should show 23 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -191,6 +191,12 @@ try {
  if(await page.locator('#walkthrough li').count()!==9)throw Error('Heavy Lifting guide missing');
  await visit('pool-day.html');
  if(await page.locator('main ol li').count()!==6)throw Error('Pool Day walkthrough missing');
+ await visit('mission-detail.html?chapter=4&mission=7');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Photo/Shoot route missing');
+ await visit('mission-detail.html?chapter=4&mission=8');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Making Gainz route missing');
+ await visit('mission-detail.html?chapter=4&mission=9');
+ if(await page.locator('#walkthrough li').count()!==8)throw Error('Watch It route missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
