@@ -19,12 +19,21 @@ class PageParser(HTMLParser):
         self.title = []
         self.in_title = False
         self.description = False
+        self.canonicals = []
+        self.robots = []
+        self.og_urls = []
     def handle_starttag(self, tag, attrs):
         a = dict(attrs)
         if tag == "title":
             self.in_title = True
         if tag == "meta" and a.get("name", "").lower() == "description" and a.get("content", "").strip():
             self.description = True
+        if tag == "link" and a.get("rel", "").lower() == "canonical":
+            self.canonicals.append(a.get("href", ""))
+        if tag == "meta" and a.get("name", "").lower() == "robots":
+            self.robots.append(a.get("content", ""))
+        if tag == "meta" and a.get("property", "").lower() == "og:url":
+            self.og_urls.append(a.get("content", ""))
         if "id" in a:
             if a["id"] in self.ids:
                 self.duplicates.append(a["id"])
@@ -51,6 +60,13 @@ for page in pages:
         errors.append(f"{page.name}: missing title")
     if not parser.description:
         warnings.append(f"{page.name}: missing meta description")
+    expected_canonical = "https://universal-gaming.github.io/GTA-6-Guide/" + ("" if page.name == "index.html" else page.name)
+    if parser.canonicals != [expected_canonical]:
+        errors.append(f"{page.name}: expected one correct canonical URL, got {parser.canonicals}")
+    if parser.og_urls and parser.og_urls != [expected_canonical]:
+        errors.append(f"{page.name}: Open Graph URL differs from canonical")
+    if any("noindex" in value.lower() for value in parser.robots):
+        warnings.append(f"{page.name}: noindex directive blocks search visibility")
     for duplicate in parser.duplicates:
         errors.append(f"{page.name}: duplicate HTML id '{duplicate}'")
     for tag, url in parser.links:
