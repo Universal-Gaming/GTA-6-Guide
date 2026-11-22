@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('66 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('69 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==66)throw Error('Sourced walkthrough filter should show sixty-six missions');
+ if(await page.locator('#chapters .mission').count()!==69)throw Error('Sourced walkthrough filter should show sixty-nine missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==0)throw Error('Reference-only filter should show zero missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==29)throw Error('Index-only filter should show 29 missions');
+ if(await page.locator('#chapters .mission').count()!==26)throw Error('Index-only filter should show 26 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -183,6 +183,14 @@ try {
  if(await page.locator('#walkthrough li').count()!==6)throw Error('Another Life guide missing');
  await visit('mission-detail.html?chapter=4&mission=3');
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Company Cars guide missing');
+ await visit('mission-detail.html?chapter=4&mission=4');
+ if(await page.locator('#walkthrough li').count()!==6)throw Error('Lawyer Up guide missing');
+ await visit('mission-detail.html?chapter=4&mission=5');
+ if(await page.locator('#walkthrough li').count()!==9)throw Error('Party Hard guide missing');
+ await visit('mission-detail.html?chapter=4&mission=6');
+ if(await page.locator('#walkthrough li').count()!==9)throw Error('Heavy Lifting guide missing');
+ await visit('pool-day.html');
+ if(await page.locator('main ol li').count()!==6)throw Error('Pool Day walkthrough missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
