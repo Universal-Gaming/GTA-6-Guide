@@ -42,7 +42,7 @@ function validateBackup(obj){
   if(key.startsWith(notesPrefix)){if(value.length>10000)throw Error('Mission note exceeds limit');continue}
   let v;try{v=JSON.parse(value)}catch{throw Error('Invalid JSON in '+key)}
   const strings=(a,max)=>Array.isArray(a)&&a.length<=max&&a.every(x=>typeof x==='string'&&x.length<=120);
-  if(key==='ugn-gta6-missions-v1'&&(!strings(v,200)||v.some(x=>!/^\\d+-\\d+$/.test(x))))throw Error('Invalid mission completion list');
+  if(key==='ugn-gta6-missions-v1'&&(!strings(v,200)||v.some(x=>!/^\d+-\d+$/.test(x))))throw Error('Invalid mission completion list');
   if(key==='ugn-gta6-collectibles-v1'&&(!v||!strings(v.found,2000)||!Array.isArray(v.custom)||v.custom.length>2000||v.custom.some(x=>!x||typeof x.id!=='string'||typeof x.name!=='string'||x.id.length>120||x.name.length>200)))throw Error('Invalid collectible journal');
   if(key==='ugn-gta6-personal-map-pins-v1'&&(!Array.isArray(v)||v.length>100||v.some(x=>!x||typeof x.id!=='string'||typeof x.name!=='string'||!Number.isFinite(x.x)||!Number.isFinite(x.y)||x.x<0||x.x>100||x.y<0||x.y>100)))throw Error('Invalid map pins');
   if(key==='ugn-gta6-saved-v1'&&!strings(v,1000))throw Error('Invalid saved places');
