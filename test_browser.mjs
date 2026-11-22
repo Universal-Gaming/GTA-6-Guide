@@ -260,14 +260,14 @@ try {
  const backup=JSON.parse(Buffer.concat(chunks).toString('utf8'));
  if(backup.format!=='ugn-gta6-story-progress'||backup.version!==1||!Array.isArray(backup.legacy))throw Error('Exported progress backup schema invalid');
  await page.locator('#restore-file').setInputFiles({name:'progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
- if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Backup restored')))throw Error('Progress restore did not complete');
+ await page.waitForFunction(()=>document.querySelector('#sync-status')?.textContent?.includes('Backup restored'),{timeout:5000});
  await page.evaluate(()=>{localStorage.setItem('ugn-gta6-chronological-catalog-v1','{}');localStorage.setItem('ugn-gta6-missions-v1','[]');});
  await page.reload({waitUntil:'domcontentloaded'});
  await page.locator('#restore-file').setInputFiles({name:'legacy-only.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({format:'ugn-gta6-story-progress',version:1,chronological:{},legacy:['3-0']}))});
- if(!await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').isChecked())throw Error('Restoring legacy-only backup failed to mark matching catalog mission');
+ await page.waitForFunction(()=>document.querySelector('input[data-catalog-id="chapter-4-ocean-beach"]')?.checked===true,{timeout:5000});
  const snapshot=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
  await page.locator('#restore-file').setInputFiles({name:'bad-progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...backup,legacy:['invalid-id']}))});
- if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Restore failed')))throw Error('Invalid backup was not rejected');
+ await page.waitForFunction(()=>document.querySelector('#sync-status')?.textContent?.includes('Restore failed'),{timeout:5000});
  const afterInvalid=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
  if(JSON.stringify(snapshot)!==JSON.stringify(afterInvalid))throw Error('Invalid backup changed saved progress');
  await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
