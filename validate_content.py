@@ -14,7 +14,7 @@ class Parser(HTMLParser):
   if 'id' in a:self.ids.add(a['id'])
   if tag=='a':self.links.append(a.get('href',''))
 pages={p.name:p.read_text(encoding='utf-8') for p in ROOT.glob('*.html')}
-required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html','pool-day.html','story-catalog-audit.html']
+required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html','pool-day.html','story-catalog-audit.html','leonida-map.html','official-map.html']
 for p in required:
  if p not in pages:errors.append('Missing required page: '+p)
 if not errors:
@@ -33,6 +33,10 @@ if not errors:
  missions=pages['missions.html']
  for phrase in ['94 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
+ if 'leonida-map.html' not in home:errors.append('Homepage must link real Leonida map viewer')
+ real_map=pages['leonida-map.html']
+ for feature in ['id="poster"','id="viewport"','id="search"','id="toggle-pois"','id="toggle-grid"','id="remove-waypoint"','ugn-gta6-real-map-waypoint-v1']:
+  if feature not in real_map:errors.append('Real Leonida map missing '+feature)
  if 'pool-day.html' not in missions:errors.append('Mission Control must link the separate Pool Day guide')
  if 'story-catalog-audit.html' not in missions:errors.append('Mission Control must link the chronological catalog')
  catalog=pages['story-catalog-audit.html']
