@@ -22,7 +22,7 @@
       if(link){const params=new URL(link.href).searchParams;const c=Number(params.get('chapter')),m=Number(params.get('mission'));if(c>=1&&c<=5&&m>=1&&m<=30)mappings.set(id,(c-1)+'-'+(m-1));}
     });
   });
-  const readLegacy=()=>{try{const value=JSON.parse(localStorage.getItem(LEGACY_KEY));return Array.isArray(value)?value.filter(v=>typeof v==='string'&&/^\\d+-\\d+$/.test(v)):[]}catch{return []}};
+  const readLegacy=()=>{try{const value=JSON.parse(localStorage.getItem(LEGACY_KEY));return Array.isArray(value)?value.filter(v=>typeof v==='string'&&/^\d+-\d+$/.test(v)):[]}catch{return []}};
   const writeLegacy=values=>{try{localStorage.setItem(LEGACY_KEY,JSON.stringify(values));return true}catch{return false}};
   const status=document.getElementById('sync-status');
   document.getElementById('import-legacy').addEventListener('click',()=>{
