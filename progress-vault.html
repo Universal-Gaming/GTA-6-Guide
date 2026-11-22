@@ -7,7 +7,28 @@ const $=id=>document.getElementById(id);
 function allowed(key){return allowedExact.has(key)||(key.startsWith(notesPrefix)&&/^ugn-gta6-mission-notes-v1:[1-5]-\d{1,3}$/.test(key))}
 function readData(){const data={};for(let i=0;i<localStorage.length;i++){const k=localStorage.key(i);if(k&&allowed(k))data[k]=localStorage.getItem(k)}return data}
 function sizeOf(value){return new Blob([JSON.stringify(value)]).size}
-function render(){const data=readData(),keys=Object.keys(data),groups=[['Mission progress',keys.filter(k=>k==='ugn-gta6-missions-v1').length],['Mission notes',keys.filter(k=>k.startsWith(notesPrefix)).length],['Collectible journal',keys.filter(k=>k==='ugn-gta6-collectibles-v1').length],['Map markers and saved places',keys.filter(k=>k==='ugn-gta6-personal-map-pins-v1'||k==='ugn-gta6-saved-v1').length],['Personal tracker',keys.filter(k=>k==='ugn-gta6-tracker-v1').length]];const target=$('stats');target.replaceChildren();for(const [name,count] of groups){const article=document.createElement('article');article.className='card';const number=document.createElement('span');number.className='stat';number.textContent=count;const label=document.createElement('span');label.textContent=name;article.append(number,label);target.appendChild(article)}$('storage-warning').textContent=keys.length+' stored guide records · approximately '+Math.ceil(sizeOf(data)/1024)+' KB. A zero means no data saved for that category.'}
+function parseStored(data,key,fallback){try{return JSON.parse(data[key]||'null')??fallback}catch{return fallback}}
+function render(){
+ const data=readData(),keys=Object.keys(data);
+ const missions=parseStored(data,'ugn-gta6-missions-v1',[]);
+ const collectibles=parseStored(data,'ugn-gta6-collectibles-v1',{found:[],custom:[]});
+ const pins=parseStored(data,'ugn-gta6-personal-map-pins-v1',[]);
+ const saved=parseStored(data,'ugn-gta6-saved-v1',[]);
+ const tracker=parseStored(data,'ugn-gta6-tracker-v1',{tasks:[]});
+ const countArray=v=>Array.isArray(v)?v.length:0;
+ const groups=[
+ ['Completed missions',countArray(missions)],
+ ['Mission notes',keys.filter(k=>k.startsWith(notesPrefix)).length],
+ ['Found collectibles',countArray(collectibles?.found)],
+ ['Custom discoveries',countArray(collectibles?.custom)],
+ ['Personal map pins',countArray(pins)],
+ ['Saved map places',countArray(saved)],
+ ['Completed tracker tasks',Array.isArray(tracker?.tasks)?tracker.tasks.filter(t=>t?.done===true).length:0]
+ ];
+ const target=$('stats');target.replaceChildren();
+ for(const [name,count] of groups){const article=document.createElement('article');article.className='card';const number=document.createElement('span');number.className='stat';number.textContent=count;const label=document.createElement('span');label.textContent=name;article.append(number,label);target.appendChild(article)}
+ $('storage-warning').textContent=keys.length+' stored guide records · approximately '+Math.ceil(sizeOf(data)/1024)+' KB. Counts reflect saved entries, not just whether a record exists.';
+}
 function download(name,content){const blob=new Blob([content],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1500)}
 $('export').onclick=()=>{try{const data=readData();download('ugn-gta6-full-backup-'+new Date().toISOString().slice(0,10)+'.json',JSON.stringify({format:FORMAT,version:VERSION,exportedAt:new Date().toISOString(),data},null,2));$('status').textContent='Backup download started. Store it somewhere private.'}catch(e){$('status').textContent='Export failed: '+e.message}};
 let selected=null;
