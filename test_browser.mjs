@@ -270,6 +270,12 @@ try {
  await page.waitForFunction(()=>document.querySelector('#sync-status')?.textContent?.includes('Restore failed'),null,{timeout:5000});
  const afterInvalid=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
  if(JSON.stringify(snapshot)!==JSON.stringify(afterInvalid))throw Error('Invalid backup changed saved progress');
+ const secondTab=await context.newPage();
+ await secondTab.goto(base+'story-catalog-audit.html',{waitUntil:'domcontentloaded'});
+ await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').uncheck();
+ await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').check();
+ await secondTab.waitForFunction(()=>document.querySelector('input[data-catalog-id="chapter-4-ocean-beach"]')?.checked===true,null,{timeout:5000});
+ await secondTab.close();
  await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
