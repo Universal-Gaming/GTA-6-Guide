@@ -14,12 +14,12 @@ class Parser(HTMLParser):
   if 'id' in a:self.ids.add(a['id'])
   if tag=='a':self.links.append(a.get('href',''))
 pages={p.name:p.read_text(encoding='utf-8') for p in ROOT.glob('*.html')}
-required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html']
+required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html']
 for p in required:
  if p not in pages:errors.append('Missing required page: '+p)
 if not errors:
  home=pages['index.html']
- for p in ['map.html','missions.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html']:
+ for p in ['map.html','missions.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html']:
   if p not in home:errors.append('Homepage lacks navigation to '+p)
  encyclopedia=pages['encyclopedia.html']
  ids=re.findall(r'(?:"id":"|id:\x27)(entry-\d+)',encyclopedia)
@@ -27,6 +27,9 @@ if not errors:
  if len(ids)<29:errors.append('Expected at least 29 encyclopedia records')
  for id in ['query','category','sort','results','count']:
   if 'id="'+id+'"' not in encyclopedia:errors.append('Encyclopedia missing UI element '+id)
+ handbook=pages['handbook.html']
+ for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
+  if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  vault=pages['progress-vault.html']
  for key in ['ugn-gta6-missions-v1','ugn-gta6-collectibles-v1','ugn-gta6-tracker-v1','ugn-gta6-saved-v1','ugn-gta6-personal-map-pins-v1','ugn-gta6-mission-notes-v1:']:
   if key not in vault:errors.append('Progress Vault omits '+key)
