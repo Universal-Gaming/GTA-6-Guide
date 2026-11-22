@@ -32,6 +32,10 @@ try {
  let json='';for await(const chunk of stream)json+=chunk.toString();
  const backup=JSON.parse(json);
  if(backup.format!=='ugn-gta6-full-backup'||backup.data['ugn-gta6-missions-v1']!=='["0-0"]')throw Error('Full backup missing mission progress');
+ await visit('handbook.html');
+ if(await page.locator('#cards article').count()!==7)throw Error('Handbook should display seven topics');
+ await page.locator('#search').fill('Paradise Taxi');
+ if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
  await visit('map.html');
