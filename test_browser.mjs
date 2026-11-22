@@ -58,17 +58,17 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('28 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('30 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==28)throw Error('Sourced walkthrough filter should show twenty-eight missions');
+ if(await page.locator('#chapters .mission').count()!==30)throw Error('Sourced walkthrough filter should show thirty missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==2)throw Error('Reference-only filter should show two missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==65)throw Error('Index-only filter should show 65 missions');
+ if(await page.locator('#chapters .mission').count()!==63)throw Error('Index-only filter should show 63 missions');
  await page.locator('#coverage-filter').selectOption('all');
- if(await page.locator('#chapters .mission').count()!==285)throw Error('All missions filter should restore 95 entries');
+ if(await page.locator('#chapters .mission').count()!==305)throw Error('All missions filter should restore 95 entries');
 
  await visit('mission-detail.html?chapter=1&mission=7');
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Pipework walkthrough not available');
@@ -101,6 +101,11 @@ try {
  if(!(await page.locator('#walkthrough').textContent()).includes('gauze'))throw Error('Just Moved In grocery checklist missing');
  await visit('mission-detail.html?chapter=2&mission=4');
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Girl\'s Trip route missing steps');
+ await visit('mission-detail.html?chapter=2&mission=5');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Moses walkthrough missing steps');
+ if(!(await page.locator('#walkthrough').textContent()).includes('Slim Jim'))throw Error('Moses vehicle unlock information missing');
+ await visit('mission-detail.html?chapter=2&mission=6');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Daily Driver walkthrough missing steps');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
