@@ -251,6 +251,16 @@ try {
  await page.evaluate(()=>localStorage.setItem('ugn-gta6-missions-v1',JSON.stringify(['3-0'])));
  await page.locator('#import-legacy').click();
  if(!await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').isChecked())throw Error('Non-destructive legacy import failed');
+ const downloadPromise=page.waitForEvent('download');
+ await page.locator('#export-progress').click();
+ const backupDownload=await downloadPromise;
+ if(backupDownload.suggestedFilename()!=='ugn-gta6-story-progress.json')throw Error('Progress backup download filename incorrect');
+ const backupStream=await backupDownload.createReadStream();
+ const chunks=[];for await(const chunk of backupStream)chunks.push(chunk);
+ const backup=JSON.parse(Buffer.concat(chunks).toString('utf8'));
+ if(backup.format!=='ugn-gta6-story-progress'||backup.version!==1||!Array.isArray(backup.legacy))throw Error('Exported progress backup schema invalid');
+ await page.locator('#restore-file').setInputFiles({name:'progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
+ if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Backup restored')))throw Error('Progress restore did not complete');
  await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
