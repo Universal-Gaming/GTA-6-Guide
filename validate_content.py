@@ -31,16 +31,16 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['47 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['50 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
  guide_page=pages['mission-detail.html']
- match=re.search(r'const guides=\\{([\\s\\S]*?)\\};',guide_page)
- route_match=re.search(r'const sourcedRoutes=new Set\\(\\[([^\\]]*)\\]\\)',missions)
- if not match or not route_match:
+ guide_block=guide_page.split('const guides={',1)
+ route_block=missions.split('const sourcedRoutes=new Set([',1)
+ if len(guide_block)!=2 or len(route_block)!=2:
   errors.append('Cannot extract mission guide keys or sourcedRoutes')
  else:
-  guide_ids=set(re.findall(r'["\\x27](\\d+-\\d+)["\\x27]\\s*:',match.group(1)))
-  route_ids=set(re.findall(r'\\x27(\\d+-\\d+)\\x27',route_match.group(1)))
+  guide_ids=set(re.findall(r"""['"](\d+-\d+)['"]\s*:""",guide_block[1].split('};',1)[0]))
+  route_ids=set(re.findall(r"'(\d+-\d+)'",route_block[1].split('])',1)[0]))
   if guide_ids!=route_ids:
    errors.append('Mission guide/index mismatch: guides only='+str(sorted(guide_ids-route_ids))+'; index only='+str(sorted(route_ids-guide_ids)))
  vault=pages['progress-vault.html']
