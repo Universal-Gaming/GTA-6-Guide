@@ -58,17 +58,17 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('33 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('36 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==33)throw Error('Sourced walkthrough filter should show thirty-three missions');
+ if(await page.locator('#chapters .mission').count()!==36)throw Error('Sourced walkthrough filter should show thirty-six missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==2)throw Error('Reference-only filter should show two missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==60)throw Error('Index-only filter should show 60 missions');
+ if(await page.locator('#chapters .mission').count()!==57)throw Error('Index-only filter should show 57 missions');
  await page.locator('#coverage-filter').selectOption('all');
- if(await page.locator('#chapters .mission').count()!==335)throw Error('All missions filter should restore 95 entries');
+ if(await page.locator('#chapters .mission').count()!==365)throw Error('All missions filter should restore 95 entries');
 
  await visit('mission-detail.html?chapter=1&mission=7');
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Pipework walkthrough not available');
@@ -113,6 +113,13 @@ try {
  if(await page.locator('#walkthrough li').count()!==5)throw Error('Breakfast Run route missing steps');
  await visit('mission-detail.html?chapter=2&mission=9');
  if(await page.locator('#walkthrough li').count()!==5)throw Error('Coffee Break route missing steps');
+ await visit('mission-detail.html?chapter=2&mission=10');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Afternoon Delight guide incomplete');
+ if(!(await page.locator('#walkthrough').textContent()).includes('2008'))throw Error('Safe combination missing');
+ await visit('mission-detail.html?chapter=2&mission=11');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Thrillbillies guide incomplete');
+ await visit('mission-detail.html?chapter=2&mission=12');
+ if(await page.locator('#walkthrough li').count()!==6)throw Error('Armored van guide incomplete');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
