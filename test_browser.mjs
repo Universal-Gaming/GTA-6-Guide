@@ -58,17 +58,17 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('20 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('24 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==20)throw Error('Sourced walkthrough filter should show twenty missions');
+ if(await page.locator('#chapters .mission').count()!==24)throw Error('Sourced walkthrough filter should show twenty-four missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==2)throw Error('Reference-only filter should show two missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==73)throw Error('Index-only filter should show 73 missions');
+ if(await page.locator('#chapters .mission').count()!==69)throw Error('Index-only filter should show 69 missions');
  await page.locator('#coverage-filter').selectOption('all');
- if(await page.locator('#chapters .mission').count()!==205)throw Error('All missions filter should restore 95 entries');
+ if(await page.locator('#chapters .mission').count()!==245)throw Error('All missions filter should restore 95 entries');
 
  await visit('mission-detail.html?chapter=1&mission=7');
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Pipework walkthrough not available');
@@ -86,6 +86,12 @@ try {
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Tourist Trap route not indexed');
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Tourist Trap route should have seven steps');
  if(!(await page.locator('#walkthrough').textContent()).includes('BEFORE STARTING'))throw Error('Tourist Trap safety warning missing');
+ await visit('mission-detail.html?chapter=1&mission=1');
+ if(await page.locator('#walkthrough li').count()!==6)throw Error('Prologue walkthrough missing steps');
+ await visit('mission-detail.html?chapter=1&mission=12');
+ if(!(await page.locator('#walkthrough').textContent()).includes('BuckMe'))throw Error('Buck Me banking walkthrough missing');
+ await visit('mission-detail.html?chapter=1&mission=18');
+ if(await page.locator('#walkthrough li').count()!==6)throw Error('Don Gone walkthrough missing steps');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
