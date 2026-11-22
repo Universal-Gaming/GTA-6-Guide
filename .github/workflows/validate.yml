@@ -23,3 +23,9 @@ jobs:
           node-version: '22'
       - name: Validate inline JavaScript syntax
         run: python validate_javascript.py
+      - name: Install Chromium smoke-test dependencies
+        run: |
+          npm install --no-save playwright@1.58.2
+          npx playwright install --with-deps chromium
+      - name: Test guide in mobile Chromium
+        run: node test_browser.mjs
