@@ -12,6 +12,8 @@ permissions:
 jobs:
   content-and-browser:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
     timeout-minutes: 30
     steps:
       - name: Check out guide
@@ -32,8 +34,6 @@ jobs:
         run: python validate_content.py
       - name: Install Playwright
         run: npm install --no-save --no-package-lock playwright@1.58.2
-      - name: Install Chromium and system dependencies
-        run: npx playwright install chromium
       - name: Run mobile browser smoke tests
         run: node test_browser.mjs
       - name: Upload browser failure diagnostics
