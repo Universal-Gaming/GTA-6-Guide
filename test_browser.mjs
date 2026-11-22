@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('78 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('81 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==78)throw Error('Sourced walkthrough filter should show seventy-eight missions');
+ if(await page.locator('#chapters .mission').count()!==81)throw Error('Sourced walkthrough filter should show eighty-one missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==0)throw Error('Reference-only filter should show zero missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==17)throw Error('Index-only filter should show 17 missions');
+ if(await page.locator('#chapters .mission').count()!==14)throw Error('Index-only filter should show 14 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -209,6 +209,12 @@ try {
  if(await page.locator('#walkthrough li').count()!==10)throw Error('Adventures in Babysitting guide missing');
  await visit('mission-detail.html?chapter=4&mission=15');
  if(await page.locator('#walkthrough li').count()!==11)throw Error('Fresh Evidence guide missing');
+ await visit('mission-detail.html?chapter=4&mission=16');
+ if(await page.locator('#walkthrough li').count()!==9)throw Error('Power Play guide missing');
+ await visit('mission-detail.html?chapter=4&mission=17');
+ if(await page.locator('#walkthrough li').count()!==10)throw Error('Childs Play guide missing');
+ await visit('mission-detail.html?chapter=4&mission=19');
+ if(await page.locator('#walkthrough li').count()!==10)throw Error('Close Surveillance guide missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
