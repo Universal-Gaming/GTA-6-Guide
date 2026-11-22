@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('41 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('44 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==41)throw Error('Sourced walkthrough filter should show forty-one missions');
+ if(await page.locator('#chapters .mission').count()!==44)throw Error('Sourced walkthrough filter should show forty-four missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==1)throw Error('Reference-only filter should show one mission');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==53)throw Error('Index-only filter should show 53 missions');
+ if(await page.locator('#chapters .mission').count()!==50)throw Error('Index-only filter should show 50 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -133,6 +133,12 @@ try {
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Mami Knows Best route missing');
  await visit('mission-detail.html?chapter=3&mission=6');
  if(await page.locator('#walkthrough li').count()!==8)throw Error('Mia follow-up route missing');
+ await visit('mission-detail.html?chapter=3&mission=7');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Tyrone guide missing');
+ await visit('mission-detail.html?chapter=3&mission=8');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Here Kitty Kitty guide missing');
+ await visit('mission-detail.html?chapter=3&mission=9');
+ if(await page.locator('#walkthrough li').count()!==5)throw Error('Kitty Litter Labs guide missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
