@@ -31,7 +31,7 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['30 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['33 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
  vault=pages['progress-vault.html']
  for key in ['ugn-gta6-missions-v1','ugn-gta6-collectibles-v1','ugn-gta6-tracker-v1','ugn-gta6-saved-v1','ugn-gta6-personal-map-pins-v1','ugn-gta6-mission-notes-v1:']:
