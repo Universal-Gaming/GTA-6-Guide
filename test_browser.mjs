@@ -58,17 +58,17 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('17 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('19 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==17)throw Error('Sourced walkthrough filter should show seventeen missions');
+ if(await page.locator('#chapters .mission').count()!==19)throw Error('Sourced walkthrough filter should show nineteen missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==2)throw Error('Reference-only filter should show two missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==76)throw Error('Index-only filter should show 76 missions');
+ if(await page.locator('#chapters .mission').count()!==74)throw Error('Index-only filter should show 74 missions');
  await page.locator('#coverage-filter').selectOption('all');
- if(await page.locator('#chapters .mission').count()!==175)throw Error('All missions filter should restore 95 entries');
+ if(await page.locator('#chapters .mission').count()!==195)throw Error('All missions filter should restore 95 entries');
 
  await visit('mission-detail.html?chapter=1&mission=7');
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Pipework walkthrough not available');
@@ -76,8 +76,12 @@ try {
  await visit('mission-detail.html?chapter=1&mission=10');
  if(await page.locator('#walkthrough li').count()<4)throw Error('Feng Shui route is missing objectives');
  await visit('mission-detail.html?chapter=1&mission=19');
- if(!(await page.locator('#walkthrough').textContent()).includes('BEFORE STARTING'))throw Error('Recalibration point-of-no-return warning missing');
+ if(!(await page.locator('#walkthrough').textContent()).includes('Tourist Trap'))throw Error('Recalibration cutoff preparation missing');
  if(await page.locator('#walkthrough li').count()<5)throw Error('Recalibration sourced objectives missing');
+ await visit('mission-detail.html?chapter=1&mission=22');
+ if(await page.locator('#walkthrough li').count()<6)throw Error('Discharge Time route missing');
+ await visit('missions.html');
+ if(!(await page.locator('main').textContent()).includes('Tourist Trap begins'))throw Error('Chapter 1 cutoff notice is incorrect');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
