@@ -14,7 +14,7 @@ class Parser(HTMLParser):
   if 'id' in a:self.ids.add(a['id'])
   if tag=='a':self.links.append(a.get('href',''))
 pages={p.name:p.read_text(encoding='utf-8') for p in ROOT.glob('*.html')}
-required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html']
+required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html','pool-day.html']
 for p in required:
  if p not in pages:errors.append('Missing required page: '+p)
 if not errors:
@@ -31,8 +31,10 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['66 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['69 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
+ if 'pool-day.html' not in missions:errors.append('Mission Control must link the separate Pool Day guide')
+ if 'www.powerpyx.com/gta-6-pool-day-walkthrough' not in pages['pool-day.html']:errors.append('Pool Day source reference missing')
  guide_page=pages['mission-detail.html']
  guide_block=guide_page.split('const guides={',1)
  route_block=missions.split('const sourcedRoutes=new Set([',1)
