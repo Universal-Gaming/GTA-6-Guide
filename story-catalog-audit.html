@@ -26,7 +26,9 @@
       if(link){const params=new URL(link.href).searchParams;const c=Number(params.get('chapter')),m=Number(params.get('mission'));if(c>=1&&c<=5&&m>=1&&m<=30)mappings.set(id,(c-1)+'-'+(m-1));}
     });
   });
-  const readLegacy=()=>{try{const value=JSON.parse(localStorage.getItem(LEGACY_KEY));return Array.isArray(value)?value.filter(v=>typeof v==='string'&&/^\d+-\d+$/.test(v)):[]}catch{return []}};
+  const legacyLengths=[22,13,28,25,7];
+  const validLegacyId=id=>{if(typeof id!=='string'||!/^\d+-\d+$/.test(id))return false;const [chapter,mission]=id.split('-').map(Number);return Number.isInteger(chapter)&&chapter>=0&&chapter<legacyLengths.length&&Number.isInteger(mission)&&mission>=0&&mission<legacyLengths[chapter];};
+  const readLegacy=()=>{try{const value=JSON.parse(localStorage.getItem(LEGACY_KEY));return Array.isArray(value)?value.filter(validLegacyId):[]}catch{return []}};
   const writeLegacy=values=>{try{localStorage.setItem(LEGACY_KEY,JSON.stringify(values));return true}catch{return false}};
   const status=document.getElementById('sync-status');
   document.getElementById('import-legacy').addEventListener('click',()=>{
@@ -54,9 +56,9 @@
       if(data?.format!=='ugn-gta6-story-progress'||data.version!==1||!data.chronological||typeof data.chronological!=='object'||Array.isArray(data.chronological)||!Array.isArray(data.legacy))throw Error('This is not a supported UGN progress backup.');
       const validIds=new Set(controls.map(input=>input.dataset.catalogId));
       const incoming=Object.entries(data.chronological).filter(([id,checked])=>validIds.has(id)&&checked===true).map(([id])=>id);
-      const importedLegacy=data.legacy.filter(id=>typeof id==='string'&&/^\d+-\d+$/.test(id));
+      const importedLegacy=data.legacy.filter(validLegacyId);
       if(importedLegacy.length>1000)throw Error('Backup contains too many legacy entries.');
-      if(data.legacy.some(id=>typeof id!=='string'||!/^\d+-\d+$/.test(id)))throw Error('Backup contains invalid legacy mission IDs.');
+      if(data.legacy.some(id=>!validLegacyId(id)))throw Error('Backup contains invalid legacy mission IDs.');
       const mergedCatalog={...saved};incoming.forEach(id=>mergedCatalog[id]=true);
       // A restored legacy completion must also light up its linked catalog entry.
       const importedSet=new Set(importedLegacy);
