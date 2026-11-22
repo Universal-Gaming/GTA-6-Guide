@@ -270,6 +270,10 @@ try {
  await page.waitForFunction(()=>document.querySelector('#sync-status')?.textContent?.includes('Restore failed'),null,{timeout:5000});
  const afterInvalid=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
  if(JSON.stringify(snapshot)!==JSON.stringify(afterInvalid))throw Error('Invalid backup changed saved progress');
+ await page.locator('#restore-file').setInputFiles({name:'out-of-range.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...backup,legacy:['4-99']}))});
+ await page.waitForFunction(()=>document.querySelector('#sync-status')?.textContent?.includes('Restore failed'),null,{timeout:5000});
+ const afterOutOfRange=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
+ if(JSON.stringify(snapshot)!==JSON.stringify(afterOutOfRange))throw Error('Out-of-range mission backup changed saved progress');
  const secondTab=await context.newPage();
  await secondTab.goto(base+'story-catalog-audit.html',{waitUntil:'domcontentloaded'});
  await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').uncheck();
