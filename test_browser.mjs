@@ -261,6 +261,11 @@ try {
  if(backup.format!=='ugn-gta6-story-progress'||backup.version!==1||!Array.isArray(backup.legacy))throw Error('Exported progress backup schema invalid');
  await page.locator('#restore-file').setInputFiles({name:'progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
  if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Backup restored')))throw Error('Progress restore did not complete');
+ const snapshot=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
+ await page.locator('#restore-file').setInputFiles({name:'bad-progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...backup,legacy:['invalid-id']}))});
+ if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Restore failed')))throw Error('Invalid backup was not rejected');
+ const afterInvalid=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
+ if(JSON.stringify(snapshot)!==JSON.stringify(afterInvalid))throw Error('Invalid backup changed saved progress');
  await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
