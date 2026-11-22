@@ -241,6 +241,17 @@ try {
  if(await page.locator('#walkthrough li').count()!==13)throw Error('Operation Savage Glory guide missing');
  await visit('mission-detail.html?chapter=5&mission=6');
  if(await page.locator('#walkthrough li').count()!==3)throw Error('Honest Abe guide missing');
+ await visit('story-catalog-audit.html');
+ if(await page.locator('section ol li input[data-catalog-id]').count()!==49)throw Error('Chronological catalog should show 49 trackable entries');
+ const legacyBefore=await page.evaluate(()=>localStorage.getItem('ugn-gta6-missions-v1'));
+ await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').check();
+ const legacyAfter=await page.evaluate(()=>JSON.parse(localStorage.getItem('ugn-gta6-missions-v1')||'[]'));
+ if(!legacyAfter.includes('3-0'))throw Error('Catalog to legacy sync failed');
+ await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').uncheck();
+ await page.evaluate(()=>localStorage.setItem('ugn-gta6-missions-v1',JSON.stringify(['3-0'])));
+ await page.locator('#import-legacy').click();
+ if(!await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').isChecked())throw Error('Non-destructive legacy import failed');
+ await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
