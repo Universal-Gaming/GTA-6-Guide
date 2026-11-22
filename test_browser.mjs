@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('56 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('60 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==56)throw Error('Sourced walkthrough filter should show fifty-six missions');
+ if(await page.locator('#chapters .mission').count()!==60)throw Error('Sourced walkthrough filter should show sixty missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==1)throw Error('Reference-only filter should show one mission');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==44)throw Error('Index-only filter should show 38 missions');
+ if(await page.locator('#chapters .mission').count()!==44)throw Error('Index-only filter should show 34 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -163,6 +163,14 @@ try {
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Security Expert guide missing');
  await visit('mission-detail.html?chapter=3&mission=21');
  if(await page.locator('#walkthrough li').count()!==8)throw Error('Ride Or Die guide missing');
+ await visit('mission-detail.html?chapter=3&mission=22');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Company Property route missing');
+ await visit('mission-detail.html?chapter=3&mission=23');
+ if(await page.locator('#walkthrough li').count()!==8)throw Error('The Missing Link route missing');
+ await visit('mission-detail.html?chapter=3&mission=24');
+ if(await page.locator('#walkthrough li').count()!==9)throw Error('Safe Word route missing');
+ await visit('mission-detail.html?chapter=3&mission=25');
+ if(await page.locator('#walkthrough li').count()!==6)throw Error('Cooties route missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
