@@ -40,6 +40,11 @@ try {
  await page.locator('#restore').click();
  await page.waitForFunction(()=>localStorage.getItem('ugn-gta6-missions-v1')==='["0-0"]');
  if(await page.evaluate(()=>localStorage.getItem('ugn-gta6-missions-v1'))!=='["0-0"]')throw Error('Full backup restore did not recover completed mission');
+ const malformedBackup={...backup,data:{...backup.data,'ugn-gta6-missions-v1':'{"not":"a list"}'}};
+ await page.locator('#import').setInputFiles({name:'malformed.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(malformedBackup))});
+ await page.locator('#restore').click();
+ await page.getByText('Restore failed:',{exact:false}).waitFor();
+ if(await page.evaluate(()=>localStorage.getItem('ugn-gta6-missions-v1'))!=='["0-0"]')throw Error('Malformed mission backup altered progress');
  const badBackup={...backup,data:{...backup.data,'unrelated-user-data':'private'}};
  await page.locator('#import').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(badBackup))});
  await page.locator('#restore').click();
