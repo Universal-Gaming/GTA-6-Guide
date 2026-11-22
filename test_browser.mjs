@@ -24,6 +24,7 @@ try {
  if(await page.locator('#results article').count()<1)throw Error('Encyclopedia filter has no results');
  await visit('progress-vault.html');
  await page.evaluate(()=>localStorage.setItem('ugn-gta6-missions-v1',JSON.stringify(['0-0'])));
+ await page.evaluate(()=>{localStorage.setItem('ugn-gta6-real-map-pins-v1',JSON.stringify([{name:'Saved map pin',px:.4,py:.6}]));localStorage.setItem('ugn-gta6-real-map-waypoint-v1',JSON.stringify({name:'Saved waypoint',px:.3,py:.7}));});
  await page.reload();
  const downloadPromise=page.waitForEvent('download');
  await page.locator('#export').click();
@@ -284,6 +285,7 @@ try {
  await page.evaluate(v=>{if(v===null)localStorage.removeItem('ugn-gta6-missions-v1');else localStorage.setItem('ugn-gta6-missions-v1',v);localStorage.removeItem('ugn-gta6-chronological-catalog-v1');},legacyBefore);
  await visit('leonida-map.html');
  if(await page.locator('#poster').count()!==1)throw Error('Real Leonida poster missing');
+ if(await page.locator('.waypoint').count()!==1)throw Error('Saved real map waypoint was not rendered on startup');
  if(await page.locator('.poi').count()<20)throw Error('Real map place directory incomplete');
  await page.locator('#search').fill('Vice City');
  if(await page.locator('#results button').count()<1)throw Error('Real map search returned no results');
