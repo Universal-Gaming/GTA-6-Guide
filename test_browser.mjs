@@ -273,6 +273,7 @@ try {
  const secondTab=await context.newPage();
  await secondTab.goto(base+'story-catalog-audit.html',{waitUntil:'domcontentloaded'});
  await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').uncheck();
+ await secondTab.waitForFunction(()=>document.querySelector('input[data-catalog-id="chapter-4-ocean-beach"]')?.checked===false,null,{timeout:5000});
  await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').check();
  await secondTab.waitForFunction(()=>document.querySelector('input[data-catalog-id="chapter-4-ocean-beach"]')?.checked===true,null,{timeout:5000});
  await secondTab.close();
