@@ -14,7 +14,7 @@ class Parser(HTMLParser):
   if 'id' in a:self.ids.add(a['id'])
   if tag=='a':self.links.append(a.get('href',''))
 pages={p.name:p.read_text(encoding='utf-8') for p in ROOT.glob('*.html')}
-required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html','pool-day.html']
+required=['index.html','map.html','missions.html','mission-detail.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html','handbook.html','pool-day.html','story-catalog-audit.html']
 for p in required:
  if p not in pages:errors.append('Missing required page: '+p)
 if not errors:
@@ -34,6 +34,14 @@ if not errors:
  for phrase in ['94 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
  if 'pool-day.html' not in missions:errors.append('Mission Control must link the separate Pool Day guide')
+ if 'story-catalog-audit.html' not in missions:errors.append('Mission Control must link the chronological catalog')
+ catalog=pages['story-catalog-audit.html']
+ catalog_parser=Parser();catalog_parser.feed(catalog)
+ if len(re.findall(r'<li><span>',catalog))!=49:errors.append('Chronological catalog should contain 49 source-index entries')
+ for element in ['catalog-stats','import-legacy','export-progress','restore-progress','restore-file','sync-status']:
+  if element not in catalog_parser.ids:errors.append('Chronological catalog missing control '+element)
+ for token in ['ugn-gta6-chronological-catalog-v1','ugn-gta6-missions-v1','chapter-','data-catalog-id','Backup restored']:
+  if token not in catalog:errors.append('Chronological catalog missing progress feature '+token)
  if 'www.powerpyx.com/gta-6-pool-day-walkthrough' not in pages['pool-day.html']:errors.append('Pool Day source reference missing')
  guide_page=pages['mission-detail.html']
  guide_block=guide_page.split('const guides={',1)
