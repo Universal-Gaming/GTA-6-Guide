@@ -9,6 +9,8 @@ permissions:
 jobs:
   validate:
     runs-on: ubuntu-latest
+    container:
+      image: mcr.microsoft.com/playwright:v1.58.2-noble
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -23,9 +25,7 @@ jobs:
           node-version: '22'
       - name: Validate inline JavaScript syntax
         run: python validate_javascript.py
-      - name: Install Chromium smoke-test dependencies
-        run: |
-          npm install --no-save playwright@1.58.2
-          npx playwright install chromium
+      - name: Install Playwright test package
+        run: npm install --no-save --no-package-lock playwright@1.58.2
       - name: Test guide in mobile Chromium
         run: node test_browser.mjs
