@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('81 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('84 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==81)throw Error('Sourced walkthrough filter should show eighty-one missions');
+ if(await page.locator('#chapters .mission').count()!==84)throw Error('Sourced walkthrough filter should show eighty-four missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==0)throw Error('Reference-only filter should show zero missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==14)throw Error('Index-only filter should show 14 missions');
+ if(await page.locator('#chapters .mission').count()!==11)throw Error('Index-only filter should show 11 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -215,6 +215,12 @@ try {
  if(await page.locator('#walkthrough li').count()!==10)throw Error('Childs Play guide missing');
  await visit('mission-detail.html?chapter=4&mission=19');
  if(await page.locator('#walkthrough li').count()!==10)throw Error('Close Surveillance guide missing');
+ await visit('mission-detail.html?chapter=4&mission=20');
+ if(await page.locator('#walkthrough li').count()!==10)throw Error('Delivery Method guide missing');
+ await visit('mission-detail.html?chapter=4&mission=21');
+ if(await page.locator('#walkthrough li').count()!==8)throw Error('Team Building guide missing');
+ await visit('mission-detail.html?chapter=4&mission=22');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Fully Catered guide missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
