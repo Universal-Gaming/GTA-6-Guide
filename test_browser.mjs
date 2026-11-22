@@ -61,6 +61,15 @@ try {
  if(!(await page.locator('main').textContent()).includes('9 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
+ await page.locator('#coverage-filter').selectOption('route');
+ if(await page.locator('#chapters .mission').count()!==9)throw Error('Sourced walkthrough filter should show nine missions');
+ await page.locator('#coverage-filter').selectOption('reference');
+ if(await page.locator('#chapters .mission').count()!==2)throw Error('Reference-only filter should show two missions');
+ await page.locator('#coverage-filter').selectOption('pending');
+ if(await page.locator('#chapters .mission').count()!==84)throw Error('Index-only filter should show 84 missions');
+ await page.locator('#coverage-filter').selectOption('all');
+ if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
+
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
