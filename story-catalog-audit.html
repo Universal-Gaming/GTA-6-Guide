@@ -52,10 +52,18 @@
       const incoming=Object.entries(data.chronological).filter(([id,checked])=>validIds.has(id)&&checked===true).map(([id])=>id);
       const importedLegacy=data.legacy.filter(id=>typeof id==='string'&&/^\d+-\d+$/.test(id));
       if(importedLegacy.length>1000)throw Error('Backup contains too many legacy entries.');
-      incoming.forEach(id=>saved[id]=true);
+      if(data.legacy.some(id=>typeof id!=='string'||!/^\d+-\d+$/.test(id)))throw Error('Backup contains invalid legacy mission IDs.');
+      const mergedCatalog={...saved};incoming.forEach(id=>mergedCatalog[id]=true);
       const mergedLegacy=[...new Set([...readLegacy(),...importedLegacy])];
-      localStorage.setItem(KEY,JSON.stringify(saved));
-      if(!writeLegacy(mergedLegacy))throw Error('Unable to store legacy progress.');
+      const oldCatalog=localStorage.getItem(KEY),oldLegacy=localStorage.getItem(LEGACY_KEY);
+      try{
+        localStorage.setItem(KEY,JSON.stringify(mergedCatalog));
+        localStorage.setItem(LEGACY_KEY,JSON.stringify(mergedLegacy));
+      }catch(error){
+        try{if(oldCatalog===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,oldCatalog);if(oldLegacy===null)localStorage.removeItem(LEGACY_KEY);else localStorage.setItem(LEGACY_KEY,oldLegacy);}catch{}
+        throw Error('Unable to save both progress trackers.');
+      }
+      saved=mergedCatalog;
       controls.forEach(input=>{input.checked=saved[input.dataset.catalogId]===true;});
       update();status.textContent='Backup restored: '+incoming.length+' catalog entries imported. Existing progress was preserved.';
     }catch(error){status.textContent='Restore failed: '+error.message;}
