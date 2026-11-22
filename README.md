@@ -10,7 +10,9 @@
 - Interactive **schematic** map: pan, zoom, fullscreen, search, six illustrative region markers and browser-saved favorites.
 - Personal map pins (up to 100), stored locally, clearly distinguished from verified game locations.
 - Official printable map link and 15-place grid-square reference finder.
-- 95-mission, five-chapter index with completion tracking and spoiler controls. Dynamic mission dossiers include sourced walkthrough steps for **nine** missions, plus two reference-only entries.
+- 95-mission, five-chapter index with completion tracking and spoiler controls. Dynamic mission dossiers currently include **94 source-linked quick-route walkthroughs** within the legacy 95-entry index. The original index is not the complete canonical story sequence.
+- A separate [chronological Chapter 4–5 story catalog](story-catalog-audit.html) lists 49 source-index entries (including optional and transitional beats), links to legacy guides, and tracks completion without renumbering existing saved progress.
+- Two-way mapped mission checkmarks, explicit legacy-progress import, and JSON backup/restore for the chronological catalog and legacy mission tracker.
 - Previous/next mission navigation and per-mission private notes.
 - Collectible Field Journal: 13 source-backed leads (one VGC whale-statue lead plus 12 Push Square sculpture leads), custom entries, found status, filtering and JSON export/import.
 - Collectible directory on the map shares found status with the journal via localStorage.
@@ -23,11 +25,14 @@
 
 ## Accuracy and map limitations
 
-**This is not yet a complete game guide.** The map is illustrative, **not** an accurate in-game map or GPS system. Marker coordinates on it are not real game coordinates. Collectible entries provide published descriptive directions, **not** verified pin coordinates. Mission details are incomplete and some titles are spoilers. Personal pins and notes are user-authored, not independently verified.
+**This is not yet a complete game guide.** The map is illustrative, **not** an accurate in-game map or GPS system. Marker coordinates on it are not real game coordinates. Collectible entries provide published descriptive directions, **not** verified pin coordinates. Mission details are incomplete, the final legacy mission remains unsourced, and some titles are spoilers. The 94/95 metric measures only the older tracker, not complete-game coverage. Personal pins and notes are user-authored, not independently verified.
 
 The official Leonida map can be accessed via [Rockstar's GTA VI media page](https://www.rockstargames.com/VI/media). We link to it rather than copying proprietary artwork. For corrections, link to primary or reputable published sources.
 
 ## Development and checks
+
+GitHub Actions runs the content validator and Playwright Chromium browser tests on pushes to `main`, pull requests and manual dispatch. A workflow file being present does **not** establish that CI has passed. Review [Actions](https://github.com/Universal-Gaming/GTA-6-Guide/actions) for actual results.
+
 
 The website is static HTML, CSS and JavaScript, deployed on GitHub Pages; no backend or build process is required. Python 3.12+ and Node.js 22+ are used for local checks:
 
