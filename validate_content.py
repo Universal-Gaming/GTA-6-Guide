@@ -31,7 +31,7 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['60 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['63 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
  guide_page=pages['mission-detail.html']
  guide_block=guide_page.split('const guides={',1)
