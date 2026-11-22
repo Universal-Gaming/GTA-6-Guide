@@ -22,7 +22,7 @@ if not errors:
  for p in ['map.html','missions.html','collectibles.html','progress-vault.html','encyclopedia.html','research.html']:
   if p not in home:errors.append('Homepage lacks navigation to '+p)
  encyclopedia=pages['encyclopedia.html']
- ids=re.findall(r'(?:"id":"|id:\\x27)(entry-\\d+)',encyclopedia)
+ ids=re.findall(r'(?:"id":"|id:\x27)(entry-\d+)',encyclopedia)
  if len(ids)!=len(set(ids)):errors.append('Duplicate encyclopedia IDs')
  if len(ids)<29:errors.append('Expected at least 29 encyclopedia records')
  for id in ['query','category','sort','results','count']:
