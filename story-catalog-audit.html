@@ -8,12 +8,16 @@
   const LEGACY_KEY="ugn-gta6-missions-v1";
   const controls=[];
   const mappings=new Map();
+  const idCounts=new Map();
   lists.forEach((list,chapterIndex)=>{
     const chapter=chapterIndex+4;
     [...list.querySelectorAll('li')].forEach(li=>{
       const title=li.querySelector('span')?.textContent?.trim();
       if(!title)return;
-      const id='chapter-'+chapter+'-'+slug(title);
+      const baseId='chapter-'+chapter+'-'+slug(title);
+      const seen=idCounts.get(baseId)||0;
+      idCounts.set(baseId,seen+1);
+      const id=seen?baseId+'-'+(seen+1):baseId;
       const input=document.createElement('input');
       input.type='checkbox';input.dataset.catalogId=id;input.checked=saved[id]===true;
       input.setAttribute('aria-label','Mark '+title+' completed');
@@ -54,6 +58,9 @@
       if(importedLegacy.length>1000)throw Error('Backup contains too many legacy entries.');
       if(data.legacy.some(id=>typeof id!=='string'||!/^\d+-\d+$/.test(id)))throw Error('Backup contains invalid legacy mission IDs.');
       const mergedCatalog={...saved};incoming.forEach(id=>mergedCatalog[id]=true);
+      // A restored legacy completion must also light up its linked catalog entry.
+      const importedSet=new Set(importedLegacy);
+      for(const [catalogId,legacyId] of mappings){if(importedSet.has(legacyId))mergedCatalog[catalogId]=true;}
       const mergedLegacy=[...new Set([...readLegacy(),...importedLegacy])];
       const oldCatalog=localStorage.getItem(KEY),oldLegacy=localStorage.getItem(LEGACY_KEY);
       try{
