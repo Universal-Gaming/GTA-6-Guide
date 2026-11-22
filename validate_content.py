@@ -31,7 +31,7 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['88 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['92 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
  if 'pool-day.html' not in missions:errors.append('Mission Control must link the separate Pool Day guide')
  if 'www.powerpyx.com/gta-6-pool-day-walkthrough' not in pages['pool-day.html']:errors.append('Pool Day source reference missing')
