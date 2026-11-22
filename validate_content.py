@@ -31,8 +31,18 @@ if not errors:
  for phrase in ['Manual saves and autosaves','Map, Index and waypoints','Paradise Taxi','RydeMe rideshare','Buses and trains']:
   if phrase not in handbook:errors.append('Handbook missing topic: '+phrase)
  missions=pages['missions.html']
- for phrase in ['44 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
+ for phrase in ['47 of 95','SOURCED QUICK ROUTE','SOURCE REFERENCE ONLY','MISSION INDEX ONLY']:
   if phrase not in missions:errors.append('Mission coverage disclosure missing: '+phrase)
+ guide_page=pages['mission-detail.html']
+ match=re.search(r'const guides=\\{([\\s\\S]*?)\\};',guide_page)
+ route_match=re.search(r'const sourcedRoutes=new Set\\(\\[([^\\]]*)\\]\\)',missions)
+ if not match or not route_match:
+  errors.append('Cannot extract mission guide keys or sourcedRoutes')
+ else:
+  guide_ids=set(re.findall(r'["\\x27](\\d+-\\d+)["\\x27]\\s*:',match.group(1)))
+  route_ids=set(re.findall(r'\\x27(\\d+-\\d+)\\x27',route_match.group(1)))
+  if guide_ids!=route_ids:
+   errors.append('Mission guide/index mismatch: guides only='+str(sorted(guide_ids-route_ids))+'; index only='+str(sorted(route_ids-guide_ids)))
  vault=pages['progress-vault.html']
  for key in ['ugn-gta6-missions-v1','ugn-gta6-collectibles-v1','ugn-gta6-tracker-v1','ugn-gta6-saved-v1','ugn-gta6-personal-map-pins-v1','ugn-gta6-mission-notes-v1:']:
   if key not in vault:errors.append('Progress Vault omits '+key)
