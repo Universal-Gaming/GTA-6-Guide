@@ -58,15 +58,15 @@ try {
  if(await page.locator('#cards article').count()!==1)throw Error('Handbook search filter failed');
  await visit('collectibles.html');
  await visit('missions.html');
- if(!(await page.locator('main').textContent()).includes('72 of 95'))throw Error('Mission coverage disclosure missing');
+ if(!(await page.locator('main').textContent()).includes('75 of 95'))throw Error('Mission coverage disclosure missing');
  await page.locator('#spoilers').click();
  if(!(await page.locator('#chapters').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Mission walkthrough coverage badges missing');
  await page.locator('#coverage-filter').selectOption('route');
- if(await page.locator('#chapters .mission').count()!==72)throw Error('Sourced walkthrough filter should show seventy-two missions');
+ if(await page.locator('#chapters .mission').count()!==75)throw Error('Sourced walkthrough filter should show seventy-five missions');
  await page.locator('#coverage-filter').selectOption('reference');
  if(await page.locator('#chapters .mission').count()!==0)throw Error('Reference-only filter should show zero missions');
  await page.locator('#coverage-filter').selectOption('pending');
- if(await page.locator('#chapters .mission').count()!==23)throw Error('Index-only filter should show 23 missions');
+ if(await page.locator('#chapters .mission').count()!==20)throw Error('Index-only filter should show 20 missions');
  await page.locator('#coverage-filter').selectOption('all');
  if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
@@ -197,6 +197,12 @@ try {
  if(await page.locator('#walkthrough li').count()!==7)throw Error('Making Gainz route missing');
  await visit('mission-detail.html?chapter=4&mission=9');
  if(await page.locator('#walkthrough li').count()!==8)throw Error('Watch It route missing');
+ await visit('mission-detail.html?chapter=4&mission=10');
+ if(await page.locator('#walkthrough li').count()!==9)throw Error('Cash Injections guide missing');
+ await visit('mission-detail.html?chapter=4&mission=11');
+ if(await page.locator('#walkthrough li').count()!==7)throw Error('Amateur Hour guide missing');
+ await visit('mission-detail.html?chapter=4&mission=12');
+ if(await page.locator('#walkthrough li').count()!==8)throw Error('Dirty Work guide missing');
  await visit('map.html');
  if(errors.length)throw Error('Uncaught browser errors: '+errors.join('; '));
  console.log('PASS: mobile homepage, navigation, encyclopedia filter, vault export, journal, missions and map');
