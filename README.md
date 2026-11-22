@@ -58,3 +58,5 @@ Open an issue with precise reproduction steps, source-backed corrections, or new
 ## Disclaimer
 
 Independent fan project. Not affiliated with or endorsed by Rockstar Games or Take-Two Interactive. Trademarks belong to their owners.
+
+- Practical Handbook: seven searchable, source-linked guides for saving, the Index, taxis, rideshare, public transit and local guide progress.
