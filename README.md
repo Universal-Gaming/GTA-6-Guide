@@ -29,14 +29,15 @@ The official Leonida map can be accessed via [Rockstar's GTA VI media page](http
 
 ## Development and checks
 
-The website is static HTML, CSS and JavaScript, deployed on GitHub Pages; no backend or build process is required. Python 3.12+ and Node.js 22+ are used for optional local checks:
+The website is static HTML, CSS and JavaScript, deployed on GitHub Pages; no backend or build process is required. Python 3.12+ and Node.js 22+ are used for local checks:
 
 ```sh
 python validate_site.py
 python validate_javascript.py
+python validate_content.py
 ```
 
-GitHub Actions runs both checks on pushes and pull requests. These checks verify static paths, sitemap and inline JavaScript **syntax**; they do not replace real browser, mobile, accessibility, or end-to-end testing.
+GitHub Actions runs the static checks and mobile Chromium smoke tests on pushes and pull requests. To run browser smoke tests locally, install Playwright (`npm install --no-save playwright@1.58.2` and `npx playwright install chromium`), then run `node test_browser.mjs`. The browser suite covers key navigation, encyclopedia filtering, full-progress export and main page startup; it is **not** a complete accessibility, performance or gameplay-data audit.
 
 ## Data and privacy
 
