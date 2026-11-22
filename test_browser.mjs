@@ -261,6 +261,10 @@ try {
  if(backup.format!=='ugn-gta6-story-progress'||backup.version!==1||!Array.isArray(backup.legacy))throw Error('Exported progress backup schema invalid');
  await page.locator('#restore-file').setInputFiles({name:'progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(backup))});
  if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Backup restored')))throw Error('Progress restore did not complete');
+ await page.evaluate(()=>{localStorage.setItem('ugn-gta6-chronological-catalog-v1','{}');localStorage.setItem('ugn-gta6-missions-v1','[]');});
+ await page.reload({waitUntil:'domcontentloaded'});
+ await page.locator('#restore-file').setInputFiles({name:'legacy-only.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({format:'ugn-gta6-story-progress',version:1,chronological:{},legacy:['3-0']}))});
+ if(!await page.locator('input[data-catalog-id="chapter-4-ocean-beach"]').isChecked())throw Error('Restoring legacy-only backup failed to mark matching catalog mission');
  const snapshot=await page.evaluate(()=>({catalog:localStorage.getItem('ugn-gta6-chronological-catalog-v1'),legacy:localStorage.getItem('ugn-gta6-missions-v1')}));
  await page.locator('#restore-file').setInputFiles({name:'bad-progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify({...backup,legacy:['invalid-id']}))});
  if(!await page.locator('#sync-status').textContent().then(t=>t.includes('Restore failed')))throw Error('Invalid backup was not rejected');
