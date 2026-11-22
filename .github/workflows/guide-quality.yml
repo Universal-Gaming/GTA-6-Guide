@@ -24,6 +24,10 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Validate site links, metadata and sitemap
+        run: python validate_site.py
+      - name: Validate inline JavaScript
+        run: python validate_javascript.py
       - name: Validate guide content
         run: python validate_content.py
       - name: Install Playwright
@@ -32,3 +36,12 @@ jobs:
         run: npx playwright install --with-deps chromium
       - name: Run mobile browser smoke tests
         run: node test_browser.mjs
+      - name: Upload browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: gta6-browser-diagnostics
+          path: |
+            test-results/
+            playwright-report/
+          if-no-files-found: ignore
