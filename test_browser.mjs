@@ -64,11 +64,11 @@ try {
  await page.locator('#coverage-filter').selectOption('route');
  if(await page.locator('#chapters .mission').count()!==37)throw Error('Sourced walkthrough filter should show thirty-seven missions');
  await page.locator('#coverage-filter').selectOption('reference');
- if(await page.locator('#chapters .mission').count()!==1)throw Error('Reference-only filter should show two missions');
+ if(await page.locator('#chapters .mission').count()!==1)throw Error('Reference-only filter should show one mission');
  await page.locator('#coverage-filter').selectOption('pending');
  if(await page.locator('#chapters .mission').count()!==57)throw Error('Index-only filter should show 57 missions');
  await page.locator('#coverage-filter').selectOption('all');
- if(await page.locator('#chapters .mission').count()!==375)throw Error('All missions filter should restore 95 entries');
+ if(await page.locator('#chapters .mission').count()!==95)throw Error('All missions filter should restore 95 entries');
 
  await visit('mission-detail.html?chapter=1&mission=7');
  if(!(await page.locator('#status').textContent()).includes('SOURCED QUICK ROUTE'))throw Error('Pipework walkthrough not available');
