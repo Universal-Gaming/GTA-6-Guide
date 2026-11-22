@@ -32,6 +32,19 @@ try {
  let json='';for await(const chunk of stream)json+=chunk.toString();
  const backup=JSON.parse(json);
  if(backup.format!=='ugn-gta6-full-backup'||backup.data['ugn-gta6-missions-v1']!=='["0-0"]')throw Error('Full backup missing mission progress');
+ const savedCount=await page.locator('#stats .stat').first().textContent();
+ if(savedCount!=='1')throw Error('Progress Vault must show one completed mission');
+ await page.evaluate(()=>localStorage.setItem('ugn-gta6-missions-v1','[]'));
+ page.once('dialog',dialog=>dialog.accept());
+ await page.locator('#import').setInputFiles({name:'progress.json',mimeType:'application/json',buffer:Buffer.from(json)});
+ await page.locator('#restore').click();
+ if(await page.evaluate(()=>localStorage.getItem('ugn-gta6-missions-v1'))!=='["0-0"]')throw Error('Full backup restore did not recover completed mission');
+ const badBackup={...backup,data:{...backup.data,'unrelated-user-data':'private'}};
+ await page.locator('#import').setInputFiles({name:'bad.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(badBackup))});
+ await page.locator('#restore').click();
+ if(!(await page.locator('#status').textContent()).includes('Restore failed'))throw Error('Unsafe backup was not rejected');
+ if(await page.evaluate(()=>localStorage.getItem('ugn-gta6-missions-v1'))!=='["0-0"]')throw Error('Invalid backup altered saved progress');
+
  await visit('handbook.html');
  if(await page.locator('#cards article').count()!==7)throw Error('Handbook should display seven topics');
  await page.locator('#search').fill('Paradise Taxi');
